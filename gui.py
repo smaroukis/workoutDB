@@ -11,6 +11,10 @@ Delete
 Close
 """
 
+#TODO restrict to only low, med, high intensities
+#TODO restrict only to bike, swim, run
+#TODO better user interface (scroll both ways, larger listbox)
+
 from tkinter import *
 import backend
 
@@ -42,13 +46,18 @@ def add_command():
     backend.insert(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get())
     list1.delete(0, END)
     list1.insert(END, [type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get()] )
+    view_command()
 
 def delete_command():
     backend.delete(selected_row[0])
+    view_command()
     # delete selected row, need to add data in text fields when selected in listbox
 
 def update_command():
     backend.update(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get())
+    view_command()
+
+backend.connect()
 
 window=Tk()
 window.wm_title("WorkoutDB")
