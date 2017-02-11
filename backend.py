@@ -34,15 +34,13 @@ def search(type="", duration="", intensity="", description=""):
 def delete(id):
     conn=sqlite3.connect("workouts.db")
     cur=conn.cursor()
-    cur.execute("DELETE FROM workout WHERE id=?",(id,)) # comma for sqlite
-    conn.commit
+    cur.execute("DELETE FROM workout WHERE id=?", (id,)) # comma for sqlite
+    conn.commit()
     conn.close()
 
 def update(id, type, duration, intensity, description):
     conn=sqlite3.connect("workouts.db")
     cur=conn.cursor()
-    cur.execute("UPDATE workout SET type=?, duration=?, intensity=?, description=?", (id, type, duration, intensity, description))
+    cur.execute("UPDATE workout SET type=?, duration=?, intensity=?, description=? WHERE id=?", (type, duration, intensity, description, id))
     conn.commit()
     conn.close()
-
-connect()

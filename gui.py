@@ -16,8 +16,17 @@ import backend
 
 def get_selected_row(event): # since we binded this to the <<ListboxSelect>> widget event
     # When user selects a row in the listbox, grab the id and put the data in the textboxes, use the bind method
+    global selected_row # Need to perform action on in delete_command()
     index=list1.curselection()[0]
-    return(list1.get(index)) # get's a tuple of values
+    selected_row = list1.get(index)# get's a tuple of values
+    e1.delete(0, END)
+    e1.insert(END, selected_row[1])
+    e2.delete(0, END)
+    e2.insert(END, selected_row[2])
+    e3.delete(0, END)
+    e3.insert(END, selected_row[3])
+    e4.delete(0, END)
+    e4.insert(END, selected_row[4])
 
 def view_command():
     list1.delete(0, END) # deletes from 0 to END of listbox
@@ -35,10 +44,14 @@ def add_command():
     list1.insert(END, [type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get()] )
 
 def delete_command():
-    backend.delete(get_selected_row()[0])
+    backend.delete(selected_row[0])
     # delete selected row, need to add data in text fields when selected in listbox
 
+def update_command():
+    backend.update(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get())
+
 window=Tk()
+window.wm_title("WorkoutDB")
 
 l1=Label(window, text="Type")
 l1.grid(row=0, column=0)
@@ -84,7 +97,7 @@ b1.grid(row=6, column=0)
 b2=Button(window, text="Add", width=12, command=add_command)
 b2.grid(row=4, column=0)
 
-b3=Button(window, text="Update", width=12)
+b3=Button(window, text="Update", width=12, command=update_command)
 b3.grid(row=5, column=0)
 
 b4=Button(window, text="View All", width=12, command=view_command)
@@ -93,7 +106,7 @@ b4.grid(row=6, column=1)
 b5=Button(window, text="Delete", width=12, command=delete_command)
 b5.grid(row=4, column=1)
 
-b6=Button(window, text="Close", width=12)
+b6=Button(window, text="Close", width=12, command=window.destroy)
 b6.grid(row=5, column=1)
 
 
