@@ -10,7 +10,7 @@ Update entry
 Delete
 Close
 """
-
+#TODO add in tags field
 #TODO restrict to only low, med, high intensities
 #TODO restrict only to bike, swim, run
 #TODO better user interface (scroll both ways, larger listbox)
@@ -31,6 +31,8 @@ def get_selected_row(event): # since we binded this to the <<ListboxSelect>> wid
     e3.insert(END, selected_row[3])
     e4.delete(0, END)
     e4.insert(END, selected_row[4])
+    e5.delete(0, END)
+    e5.insert(END, selected_row[5])
 
 def view_command():
     list1.delete(0, END) # deletes from 0 to END of listbox
@@ -39,13 +41,13 @@ def view_command():
 
 def search_command():
     list1.delete(0, END)
-    for row in backend.search(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get()): # StringVar is not a direct string
+    for row in backend.search(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get()): # StringVar is not a direct string
         list1.insert(END, row)
 
 def add_command():
-    backend.insert(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get())
+    backend.insert(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
     list1.delete(0, END)
-    list1.insert(END, [type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get()] )
+    list1.insert(END, [type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get()] )
     view_command()
 
 def delete_command():
@@ -54,7 +56,7 @@ def delete_command():
     # delete selected row, need to add data in text fields when selected in listbox
 
 def update_command():
-    backend.update(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get())
+    backend.update(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
     view_command()
 
 backend.connect()
@@ -74,6 +76,9 @@ l3.grid(row=2, column=0)
 l4=Label(window, text="Description")
 l4.grid(row=3, column=0)
 
+l5=Label(window, text="Tags")
+l5.grid(row=4, column=0)
+
 type_text=StringVar()
 e1=Entry(window, textvariable=type_text)
 e1.grid(row=0, column=1)
@@ -90,6 +95,10 @@ description_text=StringVar()
 e4=Entry(window, textvariable=description_text)
 e4.grid(row=3, column=1)
 
+tag_text=StringVar()
+e5=Entry(window, textvariable=tag_text)
+e5.grid(row=4, column=1)
+
 list1=Listbox(window, height=6, width=25)
 list1.grid(row=0, column=2, rowspan=6, columnspan=2)
 
@@ -101,22 +110,22 @@ sb1.configure(command=list1.yview)
 list1.bind('<<ListboxSelect>>', get_selected_row) # Binds the get_selected_row function to the <<ListboxSelect>> widget event
 
 b1=Button(window, text="Search", width=12, command=search_command)
-b1.grid(row=6, column=0)
+b1.grid(row=7, column=0)
 
 b2=Button(window, text="Add", width=12, command=add_command)
-b2.grid(row=4, column=0)
+b2.grid(row=5, column=0)
 
 b3=Button(window, text="Update", width=12, command=update_command)
-b3.grid(row=5, column=0)
+b3.grid(row=6, column=0)
 
 b4=Button(window, text="View All", width=12, command=view_command)
-b4.grid(row=6, column=1)
+b4.grid(row=7, column=1)
 
 b5=Button(window, text="Delete", width=12, command=delete_command)
-b5.grid(row=4, column=1)
+b5.grid(row=5, column=1)
 
 b6=Button(window, text="Close", width=12, command=window.destroy)
-b6.grid(row=5, column=1)
+b6.grid(row=6, column=1)
 
 
 window.mainloop()
