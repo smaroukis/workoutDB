@@ -16,8 +16,10 @@ Close
 
 from tkinter import *
 from backend import Database
+from logger import Logger
 
 database=Database("workouts.db")
+logger=Logger("log.txt")
 
 def get_selected_row(event): # since we binded this to the <<ListboxSelect>> widget event
     # When user selects a row in the listbox, grab the id and put the data in the textboxes, use the bind method
@@ -60,6 +62,9 @@ def update_command():
     database.update(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
     view_command()
 
+def log_command():
+    logger.log(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
+    logger.commit()
 
 window=Tk()
 window.wm_title("WorkoutDB")
@@ -126,6 +131,9 @@ b5.grid(row=5, column=1)
 
 b6=Button(window, text="Close", width=12, command=window.destroy)
 b6.grid(row=6, column=1)
+
+b7=Button(window, text="Log", width=12, command=log_command)
+b7.grid(row=8, column=0)
 
 
 window.mainloop()
