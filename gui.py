@@ -10,13 +10,14 @@ Update entry
 Delete
 Close
 """
-#TODO add in tags field
 #TODO restrict to only low, med, high intensities
 #TODO restrict only to bike, swim, run
 #TODO better user interface (scroll both ways, larger listbox)
 
 from tkinter import *
-import backend
+from backend import Database
+
+database=Database("workouts.db")
 
 def get_selected_row(event): # since we binded this to the <<ListboxSelect>> widget event
     # When user selects a row in the listbox, grab the id and put the data in the textboxes, use the bind method
@@ -36,30 +37,29 @@ def get_selected_row(event): # since we binded this to the <<ListboxSelect>> wid
 
 def view_command():
     list1.delete(0, END) # deletes from 0 to END of listbox
-    for row in backend.view():
+    for row in database.view():
         list1.insert(END, row) # insert(index, what) method  is specific to tkinter list objects
 
 def search_command():
     list1.delete(0, END)
-    for row in backend.search(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get()): # StringVar is not a direct string
+    for row in database.search(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get()): # StringVar is not a direct string
         list1.insert(END, row)
 
 def add_command():
-    backend.insert(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
+    database.insert(type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
     list1.delete(0, END)
     list1.insert(END, [type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get()] )
     view_command()
 
 def delete_command():
-    backend.delete(selected_row[0])
+    database.delete(selected_row[0])
     view_command()
     # delete selected row, need to add data in text fields when selected in listbox
 
 def update_command():
-    backend.update(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
+    database.update(selected_row[0], type_text.get(), duration_text.get(),  intensity_text.get(), description_text.get(), tag_text.get())
     view_command()
 
-backend.connect()
 
 window=Tk()
 window.wm_title("WorkoutDB")
